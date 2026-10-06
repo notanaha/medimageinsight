@@ -1,0 +1,41 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: mii_zero_shot_score
+display_name: mii-zero-shot-score
+description: Compare the saved tile embeddings with two text prompts and write ROC/AUC (no training)
+version: 1
+type: command
+code: ../scripts
+command: >-
+  python score_zero_shot.py
+  --embeddings_dir ${{inputs.embeddings_dir}}
+  --cohort_csv ${{inputs.cohort_csv}}
+  --output_dir ${{outputs.output_dir}}
+  --endpoint ${{inputs.endpoint}}
+  --model ${{inputs.model}}
+  --prompt_negative "${{inputs.prompt_negative}}"
+  --prompt_positive "${{inputs.prompt_positive}}"
+  $[[--managed_identity_client_id ${{inputs.managed_identity_client_id}}]]
+environment: azureml:mii-embed-env@latest
+inputs:
+  embeddings_dir:
+    type: uri_folder
+  cohort_csv:
+    type: uri_file
+  endpoint:
+    type: string
+  model:
+    type: string
+    default: MedImageInsight-Premium
+  prompt_negative:
+    type: string
+  prompt_positive:
+    type: string
+  # Only for a user-assigned identity. Pass None to leave it out entirely and let the script fall
+  # back to the compute's own identity. It must have no default: AML reads an empty string as
+  # "not specified" and then fails to build the command line.
+  managed_identity_client_id:
+    type: string
+    optional: true
+outputs:
+  output_dir:
+    type: uri_folder

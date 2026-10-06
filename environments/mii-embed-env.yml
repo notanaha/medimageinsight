@@ -1,0 +1,19 @@
+name: mii-embed
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.9
+  - pip=25.2
+  # OpenSlide comes from conda because the pip package is only a binding to this C library.
+  - openslide=4.0.0
+  # pixman 0.38 silently corrupts regions read through OpenSlide.
+  - pixman>=0.40
+  - pip:
+      - azure-identity==1.25.2
+      - requests==2.32.5
+      - numpy==1.26.4
+      - Pillow==11.3.0
+      - scikit-learn==1.6.1
+      - openslide-python==1.4.2
+      - mlflow-skinny==2.22.0
+      - azureml-mlflow==1.60.0

@@ -1,0 +1,6 @@
+{
+  "CT": "A computed tomography (CT) image.",
+  "H&E": "A hematoxylin and eosin (H&E) stained histopathology image.",
+  "X-ray": "An X-ray radiograph.",
+  "MRI": "A magnetic resonance imaging (MRI) image."
+}

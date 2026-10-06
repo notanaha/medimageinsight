@@ -1,0 +1,9 @@
+outputs/
+__pycache__/
+.venv/
+.env
+.env.*
+data/
+cohort.csv
+.ipynb_checkpoints/
+*.py[cod]

@@ -1,0 +1,55 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: mii_tile_embedding
+display_name: mii-tile-embedding
+description: Tile each slide at a fixed MPP and embed every tile with MedImageInsight (CPU only)
+version: 1
+type: command
+code: ../scripts
+command: >-
+  python embed_tiles.py
+  --images_dir ${{inputs.images_dir}}
+  --cohort_csv ${{inputs.cohort_csv}}
+  --output_dir ${{outputs.output_dir}}
+  --endpoint ${{inputs.endpoint}}
+  --model ${{inputs.model}}
+  --target_mpp ${{inputs.target_mpp}}
+  --tile_size ${{inputs.tile_size}}
+  --occupancy_threshold ${{inputs.occupancy_threshold}}
+  --max_tiles ${{inputs.max_tiles}}
+  --batch_size ${{inputs.batch_size}}
+  $[[--managed_identity_client_id ${{inputs.managed_identity_client_id}}]]
+environment: azureml:mii-embed-env@latest
+inputs:
+  images_dir:
+    type: uri_folder
+  cohort_csv:
+    type: uri_file
+  endpoint:
+    type: string
+  model:
+    type: string
+    default: MedImageInsight-Premium
+  target_mpp:
+    type: number
+    default: 0.5
+  tile_size:
+    type: integer
+    default: 512
+  occupancy_threshold:
+    type: number
+    default: 0.20
+  max_tiles:
+    type: integer
+    default: 32
+  batch_size:
+    type: integer
+    default: 8
+  # Only for a user-assigned identity. Pass None to leave it out entirely and let the script fall
+  # back to the compute's own identity. It must have no default: AML reads an empty string as
+  # "not specified" and then fails to build the command line.
+  managed_identity_client_id:
+    type: string
+    optional: true
+outputs:
+  output_dir:
+    type: uri_folder
